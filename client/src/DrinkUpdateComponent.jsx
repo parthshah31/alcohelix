@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 
 export default class DrinkUpdateComponent extends Component {
   render() {
-    let buttonFn = null;
-    let buttonText = "";
-
     if (!this.props.active) {
       return (
         <div>
