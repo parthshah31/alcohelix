@@ -12,8 +12,10 @@ class App extends Component {
     this.state = {
       user: {
         weight: 200.0,
+        gender: 'M',
         food: 0.0,
-        history: [],
+        history: [Date.now()-20*60*1000, Date.now()-11*60*1000, Date.now()-10*60*1000, Date.now()-5*60*1000, Date.now()],
+        schedule: [Date.now()+10*60*1000, Date.now()+20*60*1000, Date.now()+30*60*1000],
         goal: 0.08,
         alpha: 1
       }
