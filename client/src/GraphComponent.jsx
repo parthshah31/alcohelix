@@ -12,9 +12,12 @@ export default class GraphComponent extends Component {
     ];
 
     return (
-      <LineChart width={400} height={400} data={data}>
-        <Line type="monotone" dataKey="uv" stroke="blue" />
-      </LineChart>
+      <div>
+        <h2>graph component</h2>
+        <LineChart width={400} height={400} data={data}>
+          <Line type="monotone" dataKey="uv" stroke="blue" />
+        </LineChart>
+      </div>
     );
   }
 };

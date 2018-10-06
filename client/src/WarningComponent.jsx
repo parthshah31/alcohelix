@@ -8,14 +8,14 @@ export default class WarningComponent extends Component {
       curTime: Date.now()
     };
 
-    this.updateTimeAndCheckTimeout = e => {
+    this.updateCurTime = e => {
       this.setState({curTime: Date.now()});
     }
   }
 
   componentDidMount() {
     this.clockInterval = setInterval(
-      this.updateTimeAndCheckTimeout,
+      this.updateCurTime,
       1000
     );
   }
