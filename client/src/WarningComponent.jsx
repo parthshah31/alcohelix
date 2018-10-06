@@ -27,7 +27,7 @@ export default class WarningComponent extends Component {
   render() {
     let warningText = "";
     if (!this.props.active || this.props.schedule.length === 0) {
-      warningText = "Schedule paused. Take a drink to continue!"
+      warningText = "Schedule paused. Hit start to begin!"
     } else if (this.state.curTime < this.props.schedule[0]) {
       let secRemain = (this.props.schedule[0] - this.state.curTime)/1000;
       let minRemain = Math.floor(secRemain/60);

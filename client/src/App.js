@@ -25,11 +25,11 @@ class App extends Component {
         history: newHistory
       });
       this.calcSchedule();
-      this.resume();
     };
 
     this.resume = () => {
       this.setState({active: true});
+      this.calcSchedule();
     }
 
     this.pause = () => {
@@ -54,7 +54,9 @@ class App extends Component {
   }
 
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.calcSchedule();
+  }
 
   componentWillUnmount() {}
   
@@ -63,8 +65,6 @@ class App extends Component {
       <div>
         <h1>Alcohelix</h1>
         <button onClick={this.calcSchedule}>Calculate Schedule</button><br></br>
-        <button onClick={this.resume}>Start Drinking!</button><br></br>
-        <button onClick={this.reset}>RESET</button>
 
         <h2>State: {this.state.active ? "Active" : "Paused"}</h2>
         <h2>History</h2>
@@ -89,7 +89,10 @@ class App extends Component {
           schedule={this.state.schedule}
         />
         <DrinkUpdateComponent
+          active={this.state.active}
           addDrink={this.addDrink}
+          resume={this.resume}
+          reset={this.reset}
         />
       </div>
     );
