@@ -10,9 +10,6 @@ export default class WarningComponent extends Component {
 
     this.updateTimeAndCheckTimeout = e => {
       this.setState({curTime: Date.now()});
-      if (this.props.schedule.length < 2 || this.state.curTime > this.props.schedule[1]) {
-        this.props.resetSchedule();
-      }
     }
   }
 
@@ -29,8 +26,8 @@ export default class WarningComponent extends Component {
 
   render() {
     let warningText = "";
-    if (this.props.schedule.length < 2) {
-      warningText = "Schedule Ended. Take a drink to continue!"
+    if (!this.props.active || this.props.schedule.length === 0) {
+      warningText = "Schedule paused. Take a drink to continue!"
     } else if (this.state.curTime < this.props.schedule[0]) {
       let secRemain = (this.props.schedule[0] - this.state.curTime)/1000;
       let minRemain = Math.floor(secRemain/60);

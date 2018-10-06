@@ -3,8 +3,6 @@ import GraphComponent from './GraphComponent';
 import WarningComponent from './WarningComponent';
 import DrinkUpdateComponent from './DrinkUpdateComponent';
 
-const DRINK_CHECKER_INTERVAL = 2000;
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -15,6 +13,7 @@ class App extends Component {
       food: 0.0,
       history: [],
       schedule: [],
+      active: false,
       goal: 0.08,
       alpha: 1
     };
@@ -23,11 +22,19 @@ class App extends Component {
       let newHistory = this.state.history
       newHistory.push(Date.now());
       this.setState({
-        active: true,
         history: newHistory
       });
       this.calcSchedule();
+      this.resume();
     };
+
+    this.resume = () => {
+      this.setState({active: true});
+    }
+
+    this.pause = () => {
+      this.setState({active: false});
+    }
 
     this.calcSchedule = () => {
       let newSchedule = [Date.now()+1*10*1000, Date.now()+1*20*1000, Date.now()+1*30*1000];
@@ -36,9 +43,14 @@ class App extends Component {
       });
     };
 
-    this.resetSchedule = () => {
+    this.clearSchedule = () => {
       this.setState({schedule: []});
     };
+
+    this.reset = () => {
+      this.pause();
+      this.clearSchedule();
+    }
   }
 
 
@@ -50,21 +62,24 @@ class App extends Component {
     return (
       <div>
         <h1>Alcohelix</h1>
+        <button onClick={this.calcSchedule}>Calculate Schedule</button><br></br>
+        <button onClick={this.resume}>Start Drinking!</button><br></br>
+        <button onClick={this.reset}>RESET</button>
 
-        <h2>State: {this.state.schedule.length > 0 ? "Active" : "Paused"}</h2>
+        <h2>State: {this.state.active ? "Active" : "Paused"}</h2>
         <h2>History</h2>
         <ul>
-          {this.state.history.map(function(ts) {
+          {this.state.history.map(function(ts, ix) {
             var date = new Date(ts);
-            return <li>{date.toLocaleTimeString('en-US')}</li>;
+            return <li key={ix}>{date.toLocaleTimeString('en-US')}</li>;
           })}
         </ul>
 
         <h2>Scheduled Drinks</h2>
         <ul>
-          {this.state.schedule.map(function(ts) {
+          {this.state.schedule.map(function(ts, ix) {
             var date = new Date(ts);
-            return <li>{date.toLocaleTimeString('en-US')}</li>;
+            return <li key={ix}>{date.toLocaleTimeString('en-US')}</li>;
           })}
         </ul>
 
@@ -72,7 +87,6 @@ class App extends Component {
         <WarningComponent
           active={this.state.active}
           schedule={this.state.schedule}
-          resetSchedule={this.resetSchedule}
         />
         <DrinkUpdateComponent
           addDrink={this.addDrink}
