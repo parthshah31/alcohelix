@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import GraphComponent from './GraphComponent';
 import WarningComponent from './WarningComponent';
 import DrinkUpdateComponent from './DrinkUpdateComponent';
+import Button from "@material-ui/core/Button";
+import Slider from '@material-ui/lab/Slider';
 
 class App extends Component {
   constructor(props) {
@@ -48,6 +50,14 @@ class App extends Component {
       this.setState({schedule: []});
     };
 
+    this.handleGoalChange = (event, value) => {
+      this.setState({ goal: value });
+    };
+
+    this.handleAlphaChange = (event, value) => {
+      this.setState({ alpha: value });
+    };
+
     this.toggleScheduleView = () => {
       this.setState({expanded: !this.state.expanded})
     }
@@ -67,33 +77,47 @@ class App extends Component {
   
   render() {
     return (
-      <div>
+      <div className="view">
         <div className="logo-container">
           <img className="logo" alt="logo" src={require('./assets/title.png')}/>
         </div>
 
-        <button onClick={this.toggleScheduleView}>
-          { this.state.expanded ? "hide schedule" : "show schedule" }
-        </button>
+        <div className="expand-container">
+        <Button className="mdc-button" onClick={this.toggleScheduleView}>
+          <p className="button-text">{ this.state.expanded ? "hide schedule" : "show schedule" }</p>
+          <img className={ this.state.expanded ? "arrow arrow-up" : "arrow"} src={require('./assets/arrows.svg')}/>
+        </Button>
+        </div>
 
         <div className={this.state.expanded?"sched-expanded":"sched-closed"}>
-          <button onClick={this.calcSchedule}>calculate schedule</button>
-          <h2>State: {this.state.active ? "Active" : "Paused"}</h2>
-          <h2>History</h2>
-          <ul>
+          <div className="sched-button-container">
+            <Button className="sched-button mdc-button mdc-button--outlined mdc-ripple-upgraded mdc-ripple-upgraded--foreground-activation"
+              onClick={this.calcSchedule}>
+              <p className="button-text">calculate schedule</p>
+            </Button>
+          </div>
+          <p>
+            <strong>State:</strong>
+            {this.state.active ? " Getting Lit!!" : " Sobering Up"}
+          </p>
+          <p><strong>History</strong></p>
+          <div className="timelist">
             {this.state.history.map(function(ts, ix) {
               var date = new Date(ts);
               return <li key={ix}>{date.toLocaleTimeString('en-US')}</li>;
             })}
-          </ul>
+          </div>
 
-          <h2>Scheduled Drinks</h2>
-          <ul>
+          <p><strong>Scheduled Drinks</strong></p>
+          <div className="timelist">
             {this.state.schedule.map(function(ts, ix) {
               var date = new Date(ts);
               return <li key={ix}>{date.toLocaleTimeString('en-US')}</li>;
             })}
-          </ul>
+          </div>
+
+          <Slider value={this.state.goal} aria-labelledby="label" onChange={this.handleGoalChange}/>
+          <Slider value={this.state.alpha} aria-labelledby="label" onChange={this.handleAlphaChange}/>
         </div>
 
         <GraphComponent />

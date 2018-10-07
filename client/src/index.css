@@ -1,33 +1,106 @@
+@import url('https://fonts.googleapis.com/css?family=Comfortaa|Kodchasan|Lato');
+
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: 'Comfortaa', monospace;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+p {
+	text-align: center;
+}
+
+strong {
+	border-bottom: 1px solid white;
+}
+
+.arrow {
+	height: 12px;
+	margin-left: 8px;
+	filter: invert();
+}
+
+.arrow-up {
+	-moz-transform: scale(-1, -1);
+    -o-transform: scale(-1, -1);
+    -webkit-transform: scale(-1, -1);
+    transform: scale(-1, -1);
+}
+
+.button-text {
+	margin: 0;
+	color: #6AE5DB;
+	font-family: 'Comfortaa';
+}
+
+.expand-container {
+	margin: 0 auto;
+	text-align: center;
 }
 
 .logo {
 	width: 100%;
 	margin:0 auto;
 	text-align:center;
+	filter: invert();
 }
 
 .logo-container {
 	width: 50%;
+	min-width: 250px;
+	max-width: 450px;
 	margin:0 auto;
 }
 
-.sched-expanded {
-	display:default;
+.sched-button {
+	border: 1px solid !important;
+	border-color: #6AE5DB !important;
+}
+
+.sched-button:after {
+	background-color: var(--mdc-theme-primary,#951A24)
+}
+
+.sched-button-container {
+	text-align:center;
+	margin-top: 15px;
 }
 
 .sched-closed {
 	display:none;
+}
+
+.sched-expanded {
+	width: 70%;
+	min-width: 250px;
+	margin:15px auto;
+	border-top: 1px solid white;
+	border-bottom: 1px solid white;
+}
+
+.timelist {
+	width: 200px;
+	text-align: center;
+	margin: 0 auto 10px;
+}
+
+div[class^='MuiButton-root']:hover, div[class*=' MuiButton-root']:hover {
+	text-decoration:none;
+	background-color: rgba(106, 229, 219, 0.08) !important;
+}
+
+div[class^='MuiSlider-track'], div[class*=' MuiSlider-track'], 
+button[class^='MuiSlider-thumb'], button[class*=' MuiSlider-thumb'] {
+	background-color: #6AE5DB !important;
+}
+
+.view {
+	background-color: black;
+	color: white;
 }

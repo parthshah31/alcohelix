@@ -13,4 +13,6 @@ On mac: `brew install yarn`
 
 # npm installation
 
-* `@material/button`
+* `@material-ui/core`
+
+* `@material-ui/lab`
