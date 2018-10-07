@@ -51,7 +51,6 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
 .arrow {
 	height: 12px;
 	margin-left: 8px;
-	filter: invert();
 }
 
 .arrow-up {
