@@ -88,6 +88,11 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
 	text-align: center;
 }
 
+.graph-container {
+	text-align: center;
+	margin-top: 20px;
+}
+
 .logo {
 	width: 100%;
 	margin:0 auto;

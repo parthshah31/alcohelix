@@ -12,8 +12,8 @@ export default class GraphComponent extends Component {
     ];
 
     return (
-      <div>
-        <h2>graph component</h2>
+      <div className="graph-container">
+        <h2>graph</h2>
         <LineChart width={400} height={400} data={data}>
           <Line type="monotone" dataKey="uv" stroke="blue" />
         </LineChart>
