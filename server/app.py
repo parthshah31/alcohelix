@@ -1,10 +1,15 @@
-from flask import Flask, abort, request, jsonify
+from flask import Flask, abort, request, jsonify, g
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_guid import GUID
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import and_
+from collections import defaultdict
 import uuid
 import requests
+import datetime
+import pytz
+from functools import wraps
 from config import AUTH_URL, MAILGUN_DOMAIN, MAILGUN_API_KEY
 
 app = Flask(__name__)
@@ -20,8 +25,8 @@ class User(db.Model):
 class Drink(db.Model):
     __tablename__ = 'drink'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = Column(db.Integer, db.ForeignKey('user.id'))
-    time = Column()
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    time = db.Column(db.DateTime(timezone=True))
 
 @app.route('/')
 def home():
@@ -66,7 +71,7 @@ def account():
         f"https://api.mailgun.net/v3/{MAILGUN_DOMAIN}/messages",
         auth=('api', MAILGUN_API_KEY),
         data={
-            'from': f"Alcohelix <noreply@{MAILGUN_DOMAIN}>",
+            'from': f"Alcohelix <alcohelix@{MAILGUN_DOMAIN}>",
             'to': f"{user.kerberos}@mit.edu",
             'subject': 'Alcohelix Magic Link',
             'text': text_message,
@@ -81,9 +86,100 @@ def account():
         return "", 200
 
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        try:
+            user = db.session.query(User).filter_by(secret=request.headers.get('x-user-secret')).one()
+        except NoResultFound:
+            return abort(401)
+
+        g.user = user
+        return f(*args, **kwargs)
+    return decorated_function
+
+EST = pytz.timezone('US/Eastern')
+EPOCH = datetime.datetime(1970, 1, 1, tzinfo=pytz.utc)
+
 @app.route('/api/tonight')
+@login_required
 def tonight():
-    return 'hello'
+    start = datetime.datetime.now().replace(hour=12+5, minute=0, second=0, microsecond=0, tzinfo=EST)
+    if datetime.datetime.now().hour <= 12 + 5:
+        start -= datetime.timedelta(days=-1)
+    end = start + datetime.timedelta(days=1)
+
+    ud_pairs = db.session.query(User, Drink.time).filter(and_(Drink.time >= start, Drink.time <= end)).group_by(Drink.user_id).all()
+
+    user_histories = defaultdict(list)
+    users = {}
+    
+    for user, drink in ud_pairs:
+        users[user.id] = user
+        # TODO whack
+        user_histories[user.id].append((drink.replace(tzinfo=pytz.utc) - EPOCH).total_seconds())
+
+    for uid in users:
+        user_histories[uid].sort()
+
+    result = {
+        "users": [
+            {
+                "kerberos": user.kerberos,
+                "history": user_histories[user.id]
+            }
+            for user in users.values()
+        ]
+    }
+
+    return jsonify(result)
+
+@app.route('/api/tonight/me')
+@login_required
+def tonight_me():
+    start = datetime.datetime.now().replace(hour=12+5, minute=0, second=0, microsecond=0, tzinfo=EST)
+    if datetime.datetime.now().hour <= 12 + 5:
+        start -= datetime.timedelta(days=-1)
+    end = start + datetime.timedelta(days=1)
+
+    me = g.user
+
+    drinks = db.session.query(Drink.time).filter(and_(Drink.user_id == me.id, Drink.time >= start, Drink.time <= end)).all()
+    print(drinks)
+
+    history = [(drink[0].replace(tzinfo=pytz.utc) - EPOCH).total_seconds() for drink in drinks]
+    history.sort()
+
+    result = {
+        "kerberos": me.kerberos,
+        "history": history
+    }
+
+    return jsonify(result)
+
+
+@app.route('/api/drinks', methods=['POST'])
+@login_required
+def add_drink():
+    epoch_time = request.form.get('time') # time in seconds from UNIX epoch
+    if not epoch_time:
+        return "Needs time", 500
+
+    try:
+        epoch_time_int = int(epoch_time)
+    except ValueError:
+        return "Can't parse time", 500
+
+    if epoch_time_int < 0:
+        return "Invalid time", 500
+
+    timestamp = datetime.datetime.fromtimestamp(epoch_time_int).replace(tzinfo=pytz.utc)
+
+    drink = Drink(user_id=g.user.id, time=timestamp)
+    db.session.add(drink)
+    db.session.commit()
+    
+    return "", 200
 
 if __name__ == '__main__':
     app.run(debug=True)
