@@ -79,7 +79,7 @@ class App extends Component {
     return (
       <div className="view">
         <div className="logo-container">
-          <img className="logo" alt="logo" src={require('./assets/title.png')}/>
+          <img className="logo" alt="logo" src={require('./assets/titleinv.png')}/>
         </div>
 
         <div className="expand-container">

@@ -92,7 +92,6 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
 	width: 100%;
 	margin:0 auto;
 	text-align:center;
-	filter: invert();
 }
 
 .logo-container {
