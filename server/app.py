@@ -21,6 +21,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     kerberos = db.Column(db.String(20), unique=True, nullable=False)
     secret = db.Column(GUID(), unique=True, nullable=False)
+    weight = db.Column(db.Integer)
+    is_male = db.Column(db.Boolean)
 
 class Drink(db.Model):
     __tablename__ = 'drink'
@@ -32,6 +34,8 @@ class Drink(db.Model):
 def home():
     return abort(404)
 
+VALID_GENDERS = ['male', 'female']
+
 @app.route('/api/account', methods=['POST'])
 def account():
     kerberos = request.form.get('kerberos')
@@ -40,9 +44,18 @@ def account():
     if len(kerberos) > 20:
         return 'Kerberos too long', 401
     try:
+        weight = int(request.form.get('weight', None))
+    except (ValueError, TypeError):
+        return 'Invalid weight', 401
+
+    if request.form.get('gender') not in VALID_GENDERS:
+        return 'Invalid gender', 401
+    is_male = request.form.get('gender') == 'male'
+
+    try:
         user = db.session.query(User).filter_by(kerberos=kerberos).one()
     except NoResultFound:
-        user = User(kerberos=kerberos, secret=uuid.uuid4())
+        user = User(kerberos=kerberos, secret=uuid.uuid4(), weight=weight, is_male=is_male)
         try:
             db.session.add(user)
             db.session.commit()
@@ -126,6 +139,8 @@ def tonight():
         "users": [
             {
                 "kerberos": user.kerberos,
+                "gender": 'male' if user.is_male else 'female',
+                "weight": user.weight,
                 "history": user_histories[user.id]
             }
             for user in users.values()
@@ -145,13 +160,14 @@ def tonight_me():
     me = g.user
 
     drinks = db.session.query(Drink.time).filter(and_(Drink.user_id == me.id, Drink.time >= start, Drink.time <= end)).all()
-    print(drinks)
 
     history = [(drink[0].replace(tzinfo=pytz.utc) - EPOCH).total_seconds() for drink in drinks]
     history.sort()
 
     result = {
         "kerberos": me.kerberos,
+        "gender": 'male' if me.is_male else 'female',
+        "weight": me.weight,
         "history": history
     }
 
