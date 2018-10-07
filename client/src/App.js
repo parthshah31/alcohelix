@@ -51,11 +51,11 @@ class App extends Component {
     };
 
     this.handleGoalChange = (event, value) => {
-      this.setState({ goal: value });
+      this.setState({ goal: value/500 });
     };
 
     this.handleAlphaChange = (event, value) => {
-      this.setState({ alpha: value });
+      this.setState({ alpha: value/100 });
     };
 
     this.toggleScheduleView = () => {
@@ -116,8 +116,11 @@ class App extends Component {
             })}
           </div>
 
-          <Slider value={this.state.goal} aria-labelledby="label" onChange={this.handleGoalChange}/>
-          <Slider value={this.state.alpha} aria-labelledby="label" onChange={this.handleAlphaChange}/>
+          <p><strong>Goal BAC:</strong> {this.state.goal}</p>
+          <Slider value={this.state.goal*500} aria-labelledby="label" onChange={this.handleGoalChange}/>
+          
+          <p><strong>Alpha:</strong> {this.state.alpha}</p>
+          <Slider value={this.state.alpha*100} aria-labelledby="label" onChange={this.handleAlphaChange}/>
         </div>
 
         <GraphComponent />

@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Comfortaa|Kodchasan|Lato');
 
+/* General styling */
+
 body {
   margin: 0;
   padding: 0;
@@ -19,6 +21,25 @@ p {
 strong {
 	border-bottom: 1px solid white;
 }
+
+/* CSS for Material UI Components */
+
+div[class^='MuiButton-root']:hover, div[class*=' MuiButton-root']:hover {
+	text-decoration:none;
+	background-color: rgba(106, 229, 219, 0.08) !important;
+}
+
+div[class^='MuiSlider-track'], div[class*=' MuiSlider-track'], 
+button[class^='MuiSlider-thumb'], button[class*=' MuiSlider-thumb'] {
+	background-color: #6AE5DB !important;
+}
+
+div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
+	margin: 0 auto;
+	width: 80%;
+}
+
+/* Class styling */
 
 .arrow {
 	height: 12px;
@@ -80,6 +101,7 @@ strong {
 	width: 70%;
 	min-width: 250px;
 	margin:15px auto;
+	padding-bottom: 10px;
 	border-top: 1px solid white;
 	border-bottom: 1px solid white;
 }
@@ -88,16 +110,6 @@ strong {
 	width: 200px;
 	text-align: center;
 	margin: 0 auto 10px;
-}
-
-div[class^='MuiButton-root']:hover, div[class*=' MuiButton-root']:hover {
-	text-decoration:none;
-	background-color: rgba(106, 229, 219, 0.08) !important;
-}
-
-div[class^='MuiSlider-track'], div[class*=' MuiSlider-track'], 
-button[class^='MuiSlider-thumb'], button[class*=' MuiSlider-thumb'] {
-	background-color: #6AE5DB !important;
 }
 
 .view {
