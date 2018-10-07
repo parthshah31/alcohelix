@@ -51,7 +51,7 @@ class App extends Component {
     };
 
     this.handleGoalChange = (event, value) => {
-      this.setState({ goal: value/500 });
+      this.setState({ goal: value });
     };
 
     this.handleAlphaChange = (event, value) => {
@@ -117,7 +117,7 @@ class App extends Component {
           </div>
 
           <p><strong>Goal BAC:</strong> {this.state.goal}</p>
-          <Slider value={this.state.goal*500} aria-labelledby="label" onChange={this.handleGoalChange}/>
+          <Slider value={this.state.goal} min={0} max={0.2} step={0.02} aria-labelledby="label" onChange={this.handleGoalChange}/>
           
           <p><strong>Alpha:</strong> {this.state.alpha}</p>
           <Slider value={this.state.alpha*100} aria-labelledby="label" onChange={this.handleAlphaChange}/>
