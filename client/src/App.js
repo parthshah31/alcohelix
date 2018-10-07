@@ -8,6 +8,7 @@ class App extends Component {
     super(props);
 
     this.state = {
+      expanded: false,
       weight: 200.0,
       gender: 'M',
       food: 0.0,
@@ -47,6 +48,10 @@ class App extends Component {
       this.setState({schedule: []});
     };
 
+    this.toggleScheduleView = () => {
+      this.setState({expanded: !this.state.expanded})
+    }
+
     this.reset = () => {
       this.pause();
       this.clearSchedule();
@@ -63,25 +68,33 @@ class App extends Component {
   render() {
     return (
       <div>
-        <h1>Alcohelix</h1>
-        <button onClick={this.calcSchedule}>Calculate Schedule</button><br></br>
+        <div className="logo-container">
+          <img className="logo" alt="logo" src={require('./assets/title.png')}/>
+        </div>
 
-        <h2>State: {this.state.active ? "Active" : "Paused"}</h2>
-        <h2>History</h2>
-        <ul>
-          {this.state.history.map(function(ts, ix) {
-            var date = new Date(ts);
-            return <li key={ix}>{date.toLocaleTimeString('en-US')}</li>;
-          })}
-        </ul>
+        <button onClick={this.toggleScheduleView}>
+          { this.state.expanded ? "hide schedule" : "show schedule" }
+        </button>
 
-        <h2>Scheduled Drinks</h2>
-        <ul>
-          {this.state.schedule.map(function(ts, ix) {
-            var date = new Date(ts);
-            return <li key={ix}>{date.toLocaleTimeString('en-US')}</li>;
-          })}
-        </ul>
+        <div className={this.state.expanded?"sched-expanded":"sched-closed"}>
+          <button onClick={this.calcSchedule}>calculate schedule</button>
+          <h2>State: {this.state.active ? "Active" : "Paused"}</h2>
+          <h2>History</h2>
+          <ul>
+            {this.state.history.map(function(ts, ix) {
+              var date = new Date(ts);
+              return <li key={ix}>{date.toLocaleTimeString('en-US')}</li>;
+            })}
+          </ul>
+
+          <h2>Scheduled Drinks</h2>
+          <ul>
+            {this.state.schedule.map(function(ts, ix) {
+              var date = new Date(ts);
+              return <li key={ix}>{date.toLocaleTimeString('en-US')}</li>;
+            })}
+          </ul>
+        </div>
 
         <GraphComponent />
         <WarningComponent
