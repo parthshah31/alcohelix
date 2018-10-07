@@ -138,6 +138,21 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
 	margin: 0 auto 10px;
 }
 
+.timer {
+	background-color: white;
+	color: #6AE5DB;
+	width: 150px;
+	margin: 0 auto;
+	padding: 10px 0px;
+	border-radius: 20px;
+}
+
+.timer>h2 {
+	margin: 0 auto;
+	font-weight: bold;
+	font-family: 'Lato';
+}
+
 .view {
 	color: white;
 }

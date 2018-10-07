@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import GraphComponent from './GraphComponent';
-import WarningComponent from './WarningComponent';
 import DrinkUpdateComponent from './DrinkUpdateComponent';
 import Button from "@material-ui/core/Button";
 import Slider from '@material-ui/lab/Slider';
@@ -128,13 +127,10 @@ class App extends Component {
           addDrink={this.addDrink}
           resume={this.resume}
           reset={this.reset}
+          schedule={this.state.schedule}
         />
 
         <GraphComponent />
-        <WarningComponent
-          active={this.state.active}
-          schedule={this.state.schedule}
-        />
       </div>
     );
   }
