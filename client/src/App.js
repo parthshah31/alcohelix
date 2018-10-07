@@ -91,7 +91,7 @@ class App extends Component {
 
         <div className={this.state.expanded?"sched-expanded":"sched-closed"}>
           <div className="sched-button-container">
-            <Button className="sched-button mdc-button mdc-button--outlined mdc-ripple-upgraded mdc-ripple-upgraded--foreground-activation"
+            <Button className="sched-button"
               onClick={this.calcSchedule}>
               <p className="button-text">calculate schedule</p>
             </Button>
@@ -123,16 +123,17 @@ class App extends Component {
           <Slider value={this.state.alpha*100} aria-labelledby="label" onChange={this.handleAlphaChange}/>
         </div>
 
-        <GraphComponent />
-        <WarningComponent
-          active={this.state.active}
-          schedule={this.state.schedule}
-        />
         <DrinkUpdateComponent
           active={this.state.active}
           addDrink={this.addDrink}
           resume={this.resume}
           reset={this.reset}
+        />
+
+        <GraphComponent />
+        <WarningComponent
+          active={this.state.active}
+          schedule={this.state.schedule}
         />
       </div>
     );

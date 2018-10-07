@@ -8,6 +8,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: 'Comfortaa', monospace;
+  background-color: black;
 }
 
 code {
@@ -16,6 +17,8 @@ code {
 
 p {
 	text-align: center;
+	font-family: 'Comfortaa', monospace;
+	color: white;
 }
 
 strong {
@@ -27,6 +30,10 @@ strong {
 div[class^='MuiButton-root']:hover, div[class*=' MuiButton-root']:hover {
 	text-decoration:none;
 	background-color: rgba(106, 229, 219, 0.08) !important;
+}
+
+button[class^='MuiButtonBase-root'], button[class*=' MuiButtonBase-root'] {
+	margin: 0 auto;
 }
 
 div[class^='MuiSlider-track'], div[class*=' MuiSlider-track'], 
@@ -54,10 +61,27 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
     transform: scale(-1, -1);
 }
 
+.bold-text {
+	font-weight: bold;
+}
+
 .button-text {
 	margin: 0;
 	color: #6AE5DB;
 	font-family: 'Comfortaa';
+}
+
+.drink-button {
+	background-color: #6AE5DB !important;
+	display: block !important;
+}
+
+.drink-container {
+	text-align: center;
+}
+
+.drink-img {
+	margin-left: 5px;
 }
 
 .expand-container {
@@ -77,6 +101,10 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
 	min-width: 250px;
 	max-width: 450px;
 	margin:0 auto;
+}
+
+.margin-zero {
+	margin: 0;
 }
 
 .sched-button {
@@ -113,6 +141,5 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
 }
 
 .view {
-	background-color: black;
 	color: white;
 }
