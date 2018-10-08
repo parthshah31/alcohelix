@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import LoginComponent from './LoginComponent';
 import GraphComponent from './GraphComponent';
 import DrinkUpdateComponent from './DrinkUpdateComponent';
 import Button from "@material-ui/core/Button";
 import Slider from '@material-ui/lab/Slider';
+import axios from 'axios';
 
 
 class App extends Component {
@@ -18,13 +20,58 @@ class App extends Component {
       schedule: [],
       active: false,
       goal: 0.08,
-      alpha: 1
+      alpha: 1,
+      secret: null,
+      kerberos: null
+    };
+
+    this.fetchHistoryFromServer = () => {
+      axios.get('/api/tonight/me', {
+        headers: {
+          'X-User-Secret': this.state.secret
+        }
+      }).then((response) => {
+        this.setState({
+          history: response.data.history
+        });
+      });
+    };
+
+    const oldDataString = window.localStorage.getItem('data');
+    if (oldDataString != null) {
+      const oldData = JSON.parse(oldDataString); 
+      this.state.weight = oldData.weight;
+      this.state.kerberos = oldData.kerberos;
+      this.state.secret = oldData.secret;
+      this.state.gender = oldData.gender;
+      this.fetchHistoryFromServer();
+    }
+
+    this.onLogin = (data) => {
+      window.localStorage.setItem('data', JSON.stringify(data));
+      this.setState({
+        weight: data.weight,
+        kerberos: data.kerberos,
+        secret: data.secret,
+        gender: data.gender
+      });
+      this.fetchHistoryFromServer();
     };
 
     this.addDrink = () => {
       let newHistory = this.state.history
-      newHistory.push(Date.now());
+      const ts = Date.now();
+      newHistory.push(ts);
       newHistory.sort();
+      axios.post('/api/drinks', {
+        time: ts
+      }, {
+        headers: {
+          'X-User-Secret': this.state.secret
+        }
+      }).then((response) => {
+        console.log(response);
+      });
       this.setState({
         history: newHistory
       });
@@ -83,6 +130,8 @@ class App extends Component {
           <img className="logo" alt="logo" src={require('./assets/titleinv.png')}/>
         </div>
 
+        { this.state.secret ? (
+        <div>
         <div className="expand-container">
         <Button className="mdc-button" onClick={this.toggleScheduleView}>
           <p className="button-text">{ this.state.expanded ? "hide schedule" : "show schedule" }</p>
@@ -101,14 +150,26 @@ class App extends Component {
               var date = new Date(ts);
               return <li key={ix}>{date.toLocaleTimeString('en-US')}</li>;
             })}
-          </div>
+          <div className="expand-container">
+            <Button className="mdc-button" onClick={this.toggleScheduleView}>
+              <p className="button-text">{ this.state.expanded ? "hide schedule" : "show schedule" }</p>
+              <img className={ this.state.expanded ? "arrow arrow-up" : "arrow"} src={require('./assets/arrows.svg')}/>
+            </Button>
+            </div>
 
-          <p><strong>Scheduled Drinks</strong></p>
-          <div className="timelist">
-            {this.state.schedule.map(function(ts, ix) {
-              var date = new Date(ts);
-              return <li key={ix}>{date.toLocaleTimeString('en-US')}</li>;
-            })}
+            <p><strong>Scheduled Drinks</strong></p>
+            <div className="timelist">
+              {this.state.schedule.map(function(ts, ix) {
+                var date = new Date(ts);
+                return <li key={ix}>{date.toLocaleTimeString('en-US')}</li>;
+              })}
+            </div>
+
+            <p><strong>Goal BAC:</strong> {this.state.goal}</p>
+            <Slider value={this.state.goal} min={0} max={0.2} step={0.02} aria-labelledby="label" onChange={this.handleGoalChange}/>
+            
+            <p><strong>Alpha:</strong> {this.state.alpha}</p>
+            <Slider value={this.state.alpha*100} aria-labelledby="label" onChange={this.handleAlphaChange}/>
           </div>
 
           <p><strong>Goal BAC:</strong> {this.state.goal}</p>
@@ -132,6 +193,10 @@ class App extends Component {
           weight={this.state.weight}
           food={this.state.food}
         />
+        </div>
+        ) : (
+          <LoginComponent onLogin={this.onLogin} />
+        ) }
       </div>
     );
   }
