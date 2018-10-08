@@ -20,7 +20,14 @@ export function bac (q_bs, gender, weight) {
   return 0.01 * q_bs / bloodL;
 }
 
+export function mgFromBAC (mg, gender, weight) {
+  let bloodL = (gender === 'M' ? 75 : 65) * weight / 2.2 /1000.0;
+  return mg *  bloodL / 0.01;
+}
+
 export function bacSeries(
+    initial_q_st,
+    initial_q_bs,
     drinkTimes,
     gender,
     weight,
@@ -51,7 +58,7 @@ export function bacSeries(
   let times = [];
   let series = [];
   let c = 0;
-  let state = [0.0, 0.0];
+  let state = [initial_q_st, initial_q_bs];
   let x = 0;
 
   for (var t=startTime; t<endTime; t+=dt) {
@@ -62,11 +69,12 @@ export function bacSeries(
       x = 0;
     }
 
-    state = next(x, state[0], state[1], k_bs_max, k_l, dt / 1000);
     times.push(t);
     series.push(bac(state[1], gender, weight));
+    state = next(x, state[0], state[1], k_bs_max, k_l, dt / 1000);
+
   }
 
-  return [times, series];
+  return [times, series, state];
 
 }

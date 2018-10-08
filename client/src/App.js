@@ -13,10 +13,10 @@ class App extends Component {
 
     this.state = {
       expanded: false,
-      weight: 68.5,
+      weight: 140,
       gender: 'M',
-      food: 0,
-      history: [Date.now() - 10 * 60 * 1000],
+      food: 1,
+      history: [],
       schedule: [],
       active: false,
       goal: 0.08,
@@ -88,7 +88,7 @@ class App extends Component {
     }
 
     this.calcSchedule = () => {
-      let newSchedule = [Date.now()+1*10*1000, Date.now()+1*20*1000, Date.now()+1*30*1000];
+      let newSchedule = [];
       this.setState({
         schedule: newSchedule
       });
@@ -189,6 +189,8 @@ class App extends Component {
 
         <GraphComponent
           history={this.state.history}
+          schedule={this.state.schedule}
+          active={this.state.active}
           gender={this.state.gender}
           weight={this.state.weight}
           food={this.state.food}
