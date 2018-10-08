@@ -44,15 +44,22 @@ export default class LoginComponent extends Component {
   }
 
   render() {
-    return (<div>
+    return (<div className="login-container">
       <h1>Login</h1>
       <form onSubmit={this.submitForm}>
+        <h4>Kerberos</h4>
         <input type="text" placeholder="kerberos" value={this.state.kerberos} onChange={this.updateKerberos} />
+        <br />
+        <h4>Gender</h4>
         <select value={this.state.gender} onChange={this.updateGender}>
           <option value="M">male</option>
           <option value="F">female</option>
         </select>
+        <br />
+        <h4>Weight (lbs)</h4>
         <input type="number" value={this.state.weight} onChange={this.updateWeight} />
+        <br />
+        <h4></h4>
         <input type="submit" value="Login" />
       </form>
     </div>);

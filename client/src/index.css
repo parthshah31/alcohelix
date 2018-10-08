@@ -161,3 +161,23 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
 .view {
 	color: white;
 }
+
+.graph-container {
+  margin: 0 auto;
+}
+
+.recharts-wrapper {
+  width: auto !important;
+}
+
+.login-container {
+  text-align: center;
+}
+
+.login-container input {
+  background-color: #6AE5DB;
+  border: 5px solid #6AE5DB;
+  font-size: 14pt;
+  border-radius: 5px;
+
+}
