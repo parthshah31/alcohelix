@@ -13,10 +13,10 @@ class App extends Component {
 
     this.state = {
       expanded: false,
-      weight: 68.5,
+      weight: 140,
       gender: 'M',
-      food: 0,
-      history: [Date.now() - 10 * 60 * 1000],
+      food: 1,
+      history: [],
       schedule: [],
       active: false,
       goal: 0.08,
@@ -39,7 +39,7 @@ class App extends Component {
 
     const oldDataString = window.localStorage.getItem('data');
     if (oldDataString != null) {
-      const oldData = JSON.parse(oldDataString); 
+      const oldData = JSON.parse(oldDataString);
       this.state.weight = oldData.weight;
       this.state.kerberos = oldData.kerberos;
       this.state.secret = oldData.secret;
@@ -88,7 +88,7 @@ class App extends Component {
     }
 
     this.calcSchedule = () => {
-      let newSchedule = [Date.now()+1*10*1000, Date.now()+1*20*1000, Date.now()+1*30*1000];
+      let newSchedule = [];
       this.setState({
         schedule: newSchedule
       });
@@ -167,16 +167,10 @@ class App extends Component {
 
             <p><strong>Goal BAC:</strong> {this.state.goal}</p>
             <Slider value={this.state.goal} min={0} max={0.2} step={0.02} aria-labelledby="label" onChange={this.handleGoalChange}/>
-            
+
             <p><strong>Alpha:</strong> {this.state.alpha}</p>
             <Slider value={this.state.alpha*100} aria-labelledby="label" onChange={this.handleAlphaChange}/>
           </div>
-
-          <p><strong>Goal BAC:</strong> {this.state.goal}</p>
-          <Slider value={this.state.goal} min={0} max={0.2} step={0.02} aria-labelledby="label" onChange={this.handleGoalChange}/>
-
-          <p><strong>Alpha:</strong> {this.state.alpha}</p>
-          <Slider value={this.state.alpha*100} aria-labelledby="label" onChange={this.handleAlphaChange}/>
         </div>
 
         <DrinkUpdateComponent
@@ -189,6 +183,8 @@ class App extends Component {
 
         <GraphComponent
           history={this.state.history}
+          schedule={this.state.schedule}
+          active={this.state.active}
           gender={this.state.gender}
           weight={this.state.weight}
           food={this.state.food}
