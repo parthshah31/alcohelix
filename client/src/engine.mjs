@@ -16,7 +16,7 @@ export function next (x, q_st, q_bs, k_bs_max, k_l, dt) {
 }
 
 export function bac (q_bs, gender, weight) {
-  let bloodL = (gender === 'M' ? 75 : 65) * weight / 1000.0;
+  let bloodL = (gender === 'M' ? 75 : 65) * weight / 2.2 / 1000.0;
   return 0.01 * q_bs / bloodL;
 }
 
