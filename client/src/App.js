@@ -39,7 +39,7 @@ class App extends Component {
 
     const oldDataString = window.localStorage.getItem('data');
     if (oldDataString != null) {
-      const oldData = JSON.parse(oldDataString); 
+      const oldData = JSON.parse(oldDataString);
       this.state.weight = oldData.weight;
       this.state.kerberos = oldData.kerberos;
       this.state.secret = oldData.secret;
@@ -167,16 +167,10 @@ class App extends Component {
 
             <p><strong>Goal BAC:</strong> {this.state.goal}</p>
             <Slider value={this.state.goal} min={0} max={0.2} step={0.02} aria-labelledby="label" onChange={this.handleGoalChange}/>
-            
+
             <p><strong>Alpha:</strong> {this.state.alpha}</p>
             <Slider value={this.state.alpha*100} aria-labelledby="label" onChange={this.handleAlphaChange}/>
           </div>
-
-          <p><strong>Goal BAC:</strong> {this.state.goal}</p>
-          <Slider value={this.state.goal} min={0} max={0.2} step={0.02} aria-labelledby="label" onChange={this.handleGoalChange}/>
-
-          <p><strong>Alpha:</strong> {this.state.alpha}</p>
-          <Slider value={this.state.alpha*100} aria-labelledby="label" onChange={this.handleAlphaChange}/>
         </div>
 
         <DrinkUpdateComponent
