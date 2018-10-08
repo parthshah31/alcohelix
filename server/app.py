@@ -175,13 +175,14 @@ def tonight_me():
     drinks = db.session.query(Drink.time).filter_by(user_id=me.id).all()
 
     #history = [1000*(drink[0].replace(tzinfo=pytz.utc) - EPOCH).total_seconds() for drink in drinks]
-    drinks.sort()
+    history = [d[0] for d in drinks]
+    history.sort()
 
     result = {
         "kerberos": me.kerberos,
         "gender": 'M' if me.is_male else 'F',
         "weight": me.weight,
-        "history": drinks
+        "history": history
     }
 
     return jsonify(result)
