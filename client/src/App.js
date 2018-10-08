@@ -4,16 +4,17 @@ import DrinkUpdateComponent from './DrinkUpdateComponent';
 import Button from "@material-ui/core/Button";
 import Slider from '@material-ui/lab/Slider';
 
+
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       expanded: false,
-      weight: 200.0,
+      weight: 68.5,
       gender: 'M',
-      food: 0.0,
-      history: [],
+      food: 0,
+      history: [Date.now() - 10 * 60 * 1000],
       schedule: [],
       active: false,
       goal: 0.08,
@@ -23,6 +24,7 @@ class App extends Component {
     this.addDrink = () => {
       let newHistory = this.state.history
       newHistory.push(Date.now());
+      newHistory.sort();
       this.setState({
         history: newHistory
       });
@@ -68,12 +70,12 @@ class App extends Component {
   }
 
 
-  componentDidMount() {
-    this.calcSchedule();
-  }
+    componentDidMount() {
+      this.calcSchedule();
+    }
 
   componentWillUnmount() {}
-  
+
   render() {
     return (
       <div className="view">
@@ -89,12 +91,6 @@ class App extends Component {
         </div>
 
         <div className={this.state.expanded?"sched-expanded":"sched-closed"}>
-          <div className="sched-button-container">
-            <Button className="sched-button"
-              onClick={this.calcSchedule}>
-              <p className="button-text">calculate schedule</p>
-            </Button>
-          </div>
           <p>
             <strong>State:</strong>
             {this.state.active ? " Getting Lit!!" : " Sobering Up"}
@@ -117,7 +113,7 @@ class App extends Component {
 
           <p><strong>Goal BAC:</strong> {this.state.goal}</p>
           <Slider value={this.state.goal} min={0} max={0.2} step={0.02} aria-labelledby="label" onChange={this.handleGoalChange}/>
-          
+
           <p><strong>Alpha:</strong> {this.state.alpha}</p>
           <Slider value={this.state.alpha*100} aria-labelledby="label" onChange={this.handleAlphaChange}/>
         </div>
@@ -130,7 +126,12 @@ class App extends Component {
           schedule={this.state.schedule}
         />
 
-        <GraphComponent />
+        <GraphComponent
+          history={this.state.history}
+          gender={this.state.gender}
+          weight={this.state.weight}
+          food={this.state.food}
+        />
       </div>
     );
   }
