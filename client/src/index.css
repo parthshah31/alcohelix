@@ -36,7 +36,7 @@ button[class^='MuiButtonBase-root'], button[class*=' MuiButtonBase-root'] {
 	margin: 0 auto;
 }
 
-div[class^='MuiSlider-track'], div[class*=' MuiSlider-track'], 
+div[class^='MuiSlider-track'], div[class*=' MuiSlider-track'],
 button[class^='MuiSlider-thumb'], button[class*=' MuiSlider-thumb'] {
 	background-color: #6AE5DB !important;
 }
@@ -66,13 +66,18 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
 
 .button-text {
 	margin: 0;
-	color: #6AE5DB;
+	color:  #6AE5DB;
 	font-family: 'Comfortaa';
+}
+
+.clock-img {
+	margin-left: 10px;
 }
 
 .drink-button {
 	background-color: #6AE5DB !important;
-	display: block !important;
+  width: 150px;
+  height: 60px;
 }
 
 .drink-container {
@@ -80,7 +85,12 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
 }
 
 .drink-img {
-	margin-left: 5px;
+	margin-left: 10px;
+}
+
+.dropdown-ul {
+  list-style-type: none;
+  padding-left: 0px;
 }
 
 .expand-container {
@@ -111,12 +121,13 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
 }
 
 .sched-button {
-	border: 1px solid !important;
-	border-color: #6AE5DB !important;
+	background-color: #ff6600 !important;
+  width: 150px;
+  height: 60px;
 }
 
 .sched-button:after {
-	background-color: var(--mdc-theme-primary,#951A24)
+	background-color: var(--mdc-theme-primary,#ff6600)
 }
 
 .sched-button-container {
@@ -138,23 +149,23 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
 }
 
 .timelist {
-	width: 200px;
+	width: 300px;
 	text-align: center;
 	margin: 0 auto 10px;
 }
 
 .timer {
-	background-color: white;
-	color: #6AE5DB;
-	width: 150px;
+	background-color: black;
+	color: #ff6600;
+	width: 200px;
 	margin: 0 auto;
 	padding: 10px 0px;
 	border-radius: 20px;
+  border:
 }
 
-.timer>h2 {
+.timer>h1 {
 	margin: 0 auto;
-	font-weight: bold;
 	font-family: 'Lato';
 }
 

@@ -136,7 +136,7 @@ def tonight():
 
     user_histories = defaultdict(list)
     users = {}
-    
+
     for user, drink in ud_pairs:
         users[user.id] = user
         # TODO whack
@@ -211,7 +211,17 @@ def add_drink():
     drink = Drink(user_id=g.user.id, time=epoch_time_int)
     db.session.add(drink)
     db.session.commit()
-    
+
+    return "", 200
+
+@app.route('/api/reset', methods=['POST'])
+@login_required
+def reset_drinks():
+    try:
+        db.session.query(Drink).filter(Drink.user_id==g.user.id).delete(synchronize_session=False)
+        db.session.commit()
+    except Exception as e:
+        print (e)
     return "", 200
 
 if __name__ == '__main__':
