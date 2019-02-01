@@ -116,7 +116,7 @@ export default class GraphComponent extends Component {
         d['control'] = controlBac[i];
         d['idealControl'] = idealControlBac[i];
       }
-      if (time < this.state.now && this.state.now - time < dt) {
+      if (time > this.state.now && time - this.state.now < dt) {
         d['current-dot'] = freeBac[i];
       }
 
