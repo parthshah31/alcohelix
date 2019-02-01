@@ -28,7 +28,7 @@ class App extends Component {
       active: true,
       goal: 0.08,
       alpha: 1.0,
-      secret: null,
+      secret: true,
       kerberos: null
     };
 
