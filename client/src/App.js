@@ -107,7 +107,7 @@ class App extends Component {
         this.state.food,
         this.state.history.length > 0 ? this.state.history[0] : now,
         now,
-        now + 2 * this.state.scheduleHours * 60 * 60,
+        now + this.state.scheduleHours * 60 * 60,
         60,
         goal
       )
