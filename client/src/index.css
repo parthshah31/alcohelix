@@ -25,6 +25,15 @@ strong {
 	border-bottom: 1px solid white;
 }
 
+h5 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+h5 strong {
+  color: #6AE5DB;
+}
+
 /* CSS for Material UI Components */
 
 div[class^='MuiButton-root']:hover, div[class*=' MuiButton-root']:hover {
@@ -38,7 +47,7 @@ button[class^='MuiButtonBase-root'], button[class*=' MuiButtonBase-root'] {
 
 div[class^='MuiSlider-track'], div[class*=' MuiSlider-track'],
 button[class^='MuiSlider-thumb'], button[class*=' MuiSlider-thumb'] {
-	background-color: #6AE5DB !important;
+	background-color: #ff6600 !important;
 }
 
 div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
@@ -74,6 +83,12 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
 	margin-left: 10px;
 }
 
+.danger-text {
+  margin: 0;
+  color:  #ff0000;
+  font-family: 'Comfortaa';
+}
+
 .drink-button {
 	background-color: #6AE5DB !important;
   width: 150px;
@@ -88,6 +103,10 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
 	margin-left: 10px;
 }
 
+.drink-in-text {
+  color: #ff6600
+}
+
 .dropdown-ul {
   list-style-type: none;
   padding-left: 0px;
@@ -100,7 +119,12 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
 
 .graph-container {
 	text-align: center;
-	margin-top: 20px;
+  margin: 0 auto;
+	margin-top: 10px;
+  margin-bottom: 25px;
+  width: 100%;
+  max-width: 600px;
+  height: 400px;
 }
 
 .logo {
@@ -142,6 +166,7 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
 .sched-expanded {
 	width: 70%;
 	min-width: 250px;
+  max-width: 600px;
 	margin:15px auto;
 	padding-bottom: 10px;
 	border-top: 1px solid white;
@@ -149,9 +174,8 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
 }
 
 .timelist {
-	width: 300px;
 	text-align: center;
-	margin: 0 auto 10px;
+	margin: 0 auto;
 }
 
 .timer {
@@ -170,15 +194,13 @@ div[class^='MuiSlider-root'], div[class*=' MuiSlider-root'] {
 }
 
 .view {
+  margin-top: 10px;
 	color: white;
-}
-
-.graph-container {
-  margin: 0 auto;
 }
 
 .recharts-wrapper {
   width: auto !important;
+  left: -16px;
 }
 
 .login-container {

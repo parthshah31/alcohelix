@@ -25,9 +25,11 @@ export default class DropdownComponent extends Component {
           return <li key={ix}>{moment.unix(ts).format('hh:mm a')}</li>;
         })}
       </ul>
-    
-      <p><strong>Goal BAC:</strong> {this.props.goal}</p>
+
+      <p><strong>Goal BAC:</strong> {Math.round(this.props.goal*100)/100}</p>
       <Slider value={this.props.goal} min={0.04} max={0.16} step={0.02} aria-labelledby="label" onChange={this.props.handleGoalChange}/>
+      <p><strong>Aggressiveness:</strong> {Math.round(this.props.alpha*10)/10}</p>
+      <Slider value={this.props.alpha} min={0.0} max={1.0} step={0.1} aria-labelledby="label" onChange={this.props.handleAlphaChange}/>
       </div>
     )
 
@@ -35,7 +37,7 @@ export default class DropdownComponent extends Component {
       <div>
         <div className="expand-container">
         <Button className="mdc-button" onClick={this.toggleScheduleView}>
-          <p className="button-text">{ this.state.expanded ? "hide schedule" : "show schedule" }</p>
+          <p className="button-text">{ this.state.expanded ? "hide details" : "show details" }</p>
           <img className={ this.state.expanded ? "arrow arrow-up" : "arrow"} src={require('./assets/arrows.svg')}/>
         </Button>
         </div>
@@ -49,7 +51,7 @@ export default class DropdownComponent extends Component {
               })}
             </ul>
             <Button className="mdc-button" onClick={this.props.resetHistory}>
-              <p className="button-text">Reset History</p>
+              <p className="danger-text">Reset History</p>
             </Button>
             {this.props.active ? scheduleGoalView : <div></div>}
           </div>

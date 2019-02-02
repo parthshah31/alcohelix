@@ -1,3 +1,4 @@
+import moment from 'moment'
 const std_drink_grams = 14.0;
 const K_L_ON = 8.0 / 60 / 60;
 const alpha_bs = 0.006
@@ -34,17 +35,19 @@ export function nextControl(goal, state, gender, weight, dt) {
 }
 
 
-export function nextControlPID(goal, state, totBacErr, gender, weight, dt) {
+export function nextControlPID(goal, state, totBacErr, gender, weight, dt, alpha=0.5) {
   let DISCRETE_K_BS = alpha_bs * dt;
   let currBac = bac(state[1], gender, weight);
   let bacErr = goal - currBac;
   totBacErr += bacErr;
 
-  let k_p = 15;
-  let k_i = 0.07;
+  let k_p = 10 + alpha * 50;
+  let k_i = 0.04;
   let k_d = 0.0;
 
-  let x = (k_p * bacErr) + (k_i * totBacErr) + (-0.02 * state[0]);
+  let k_p_st = -0.03 - alpha * 0.05
+
+  let x = (k_p * bacErr) + (k_i * totBacErr) + (k_p_st * state[0]);
   return [Math.max(x, 0), totBacErr];
 }
 
@@ -85,7 +88,8 @@ export function getControlSchedule(
     currentTime,
     endTime,
     dt,
-    goal) {
+    goal,
+    alpha) {
 
     let controlStartTime = currentTime + minDrinkWaitTime;
     if (drinkTimes.length > 0) {
@@ -99,6 +103,7 @@ export function getControlSchedule(
     weight,
     food,
     startTime,
+    currentTime,
     controlStartTime,
     dt);
 
@@ -110,14 +115,15 @@ export function getControlSchedule(
   let xSeries = [];
 
   let totBacErr = 0.0;
-  for (var t=controlStartTime; t<endTime; t+=dt) {
-    [x, totBacErr] = nextControlPID(goal, state, totBacErr, gender, weight, dt);
+  for (var t=controlStartTime; t<endTime+60*60; t+=dt) {
+    [x, totBacErr] = nextControlPID(goal, state, totBacErr, gender, weight, dt, alpha);
     totX += x;
-    if (totX >= 1.0*std_drink_grams) {
-      schedule.push(Math.floor(0.6*t+0.4*schedule[schedule.length-1]));
+    if (totX >= std_drink_grams) {
+      schedule.push(Math.floor(0.58*t+0.42*schedule[schedule.length-1]));
       totX -= std_drink_grams;
     }
     state = next(x, state[0], state[1], K_BS_MAX, dt);
+
   }
   return schedule.slice(1);
 }
@@ -134,7 +140,8 @@ export function getIdealControlSeries(
     currentTime,
     endTime,
     dt,
-    goal) {
+    goal,
+    alpha) {
 
   let controlStartTime = currentTime + minDrinkWaitTime;
   if (drinkTimes.length > 0) {
@@ -149,6 +156,7 @@ export function getIdealControlSeries(
     weight,
     food,
     startTime,
+    currentTime,
     controlStartTime,
     dt);
 
@@ -161,13 +169,12 @@ export function getIdealControlSeries(
   let xSeries = [];
   let totBacErr = 0.0;
   for (var t=controlStartTime; t<endTime; t+=dt) {
-    [x, totBacErr] = nextControlPID(goal, state, totBacErr, gender, weight, dt);
+    [x, totBacErr] = nextControlPID(goal, state, totBacErr, gender, weight, dt, alpha);
     xSeries.push(x);
     times.push(t);
     series.push(bac(state[1], gender, weight));
     state = next(x, state[0], state[1], K_BS_MAX, dt);
   }
-  console.log(xSeries);
   return [times, series, state];
 }
 
@@ -180,6 +187,7 @@ export function getBacSeries(
     weight,
     food,
     startTime,
+    currentTime,
     endTime,
     dt) {
 
@@ -190,19 +198,41 @@ export function getBacSeries(
   let state = [initial_q_st, initial_q_bs];
   let x = 0;
 
+  let soberCutoff = 0.02
+  let soberTime = -1;
+  let currBac = 0;
+  let deltaBac = 0;
   for (var t=startTime; t<endTime; t+=dt) {
     x = 0;
-
     while (c < drinkTimes.length && t >= drinkTimes[c]) {
       x += std_drink_grams;
       c += 1;
     }
-    times.push(t);
-    series.push(bac(state[1], gender, weight));
-    state = next(x, state[0], state[1], K_BS_MAX, dt);
+    let newBac = bac(state[1], gender, weight);
+    deltaBac = newBac - currBac;
+    currBac = newBac;
 
+    if (soberTime < 0 && t >= currentTime + 5*60 && currBac < soberCutoff && deltaBac <= 0) {
+      soberTime = t;
+    }
+    times.push(t);
+    series.push(currBac);
+    state = next(x, state[0], state[1], K_BS_MAX, dt);
   }
 
-  return [times, series, state];
+  if (soberTime < 0) {
+    soberTime = endTime;
+    let stateCopy = [state[0], state[1]];
+    while (true) {
+      stateCopy = next(0, stateCopy[0], stateCopy[1], K_BS_MAX, dt)
+      currBac = bac(stateCopy[1], gender, weight);
+      if (currBac < soberCutoff) {
+        break;
+      }
+      soberTime += dt;
+    }
+  }
+
+  return [times, series, state, soberTime];
 
 }

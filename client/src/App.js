@@ -24,10 +24,10 @@ class App extends Component {
         moment().unix()-10*60,
       ],
       schedule: [],
-      scheduleHours: 8,
+      scheduleHours: 6,
       active: true,
-      goal: 0.08,
-      alpha: 1.0,
+      goal: 0.1,
+      alpha: 0.5,
       secret: true,
       kerberos: null
     };
@@ -70,25 +70,25 @@ class App extends Component {
       const ts = moment().unix();
       newHistory.push(ts);
       newHistory.sort();
-      axios.post('/api/drinks', {
-        time: ts
-      }, {
-        headers: {
-          'X-User-Secret': this.state.secret
-        }
-      }).then((response) => {
-        console.log(response);
-      });
+      // axios.post('/api/drinks', {
+      //   time: ts
+      // }, {
+      //   headers: {
+      //     'X-User-Secret': this.state.secret
+      //   }
+      // }).then((response) => {
+      //   console.log(response);
+      // });
       this.setState({
         history: newHistory,
-        schedule: this.calcSchedule(this.state.goal)
+        schedule: this.calcSchedule(this.state.history, this.state.goal, this.state.alpha)
       });
     };
 
     this.resume = () => {
       this.setState({
         active: true,
-        schedule: this.calcSchedule(this.state.goal)
+        schedule: this.calcSchedule(this.state.history, this.state.goal, this.state.apha)
       });
     }
 
@@ -96,12 +96,12 @@ class App extends Component {
       this.setState({active: false});
     }
 
-    this.calcSchedule = (goal) => {
+    this.calcSchedule = (history, goal, alpha) => {
       let now = moment().unix();
       let newSchedule = getControlSchedule(
         0.0,
         0.0,
-        this.state.history,
+        history,
         this.state.gender,
         this.state.weight,
         this.state.food,
@@ -109,11 +109,9 @@ class App extends Component {
         now,
         now + this.state.scheduleHours * 60 * 60,
         60,
-        goal
+        goal,
+        alpha
       )
-      for (var time of newSchedule) {
-        console.log(moment.unix(time).format("hh:mm a"));
-      }
       return newSchedule;
     };
 
@@ -126,13 +124,27 @@ class App extends Component {
     this.handleGoalChange = (event, value) => {
       this.setState({
         goal: value,
-        schedule: this.calcSchedule(value)
+        schedule: this.calcSchedule(this.state.history, value, this.state.alpha)
       });
     };
 
     this.handleAlphaChange = (event, value) => {
-      this.setState({ alpha: value });
+      this.setState({
+        alpha: value,
+        schedule: this.calcSchedule(this.state.history, this.state.goal, value)
+      });
     };
+
+    this.deleteOneHistory = () => {
+      if (this.state.history.length > 0){
+        let newHistory = this.state.history.slice(0, this.state.history.length-1);
+        this.setState({
+          history: newHistory,
+          schedule: this.calcSchedule(newHistory, this.state.goal, this.state.alpha)
+        });
+      }
+
+    }
 
     this.resetSchedule = () => {
       this.pause();
@@ -156,7 +168,7 @@ class App extends Component {
 
   componentDidMount() {
     this.setState({
-      schedule:this.calcSchedule(this.state.goal)
+      schedule:this.calcSchedule(this.state.history, this.state.goal, this.state.alpha)
     });
   }
 
@@ -188,6 +200,7 @@ class App extends Component {
             scheduleHours={this.state.scheduleHours}
             active={this.state.active}
             goal={this.state.goal}
+            alpha={this.state.alpha}
             gender={this.state.gender}
             weight={this.state.weight}
             food={this.state.food}
