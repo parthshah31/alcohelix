@@ -92,10 +92,6 @@ class App extends Component {
       });
     }
 
-    this.pause = () => {
-      this.setState({active: false});
-    }
-
     this.calcSchedule = (history, goal, alpha) => {
       let now = moment().unix();
       let newSchedule = getControlSchedule(
@@ -113,12 +109,6 @@ class App extends Component {
         alpha
       )
       return newSchedule;
-    };
-
-    this.clearSchedule = () => {
-      this.setState({
-        schedule: []
-      });
     };
 
     this.handleGoalChange = (event, value) => {
@@ -147,22 +137,26 @@ class App extends Component {
     }
 
     this.resetSchedule = () => {
-      this.pause();
-      this.clearSchedule();
+      this.setState({
+        active: false,
+        schedule: []
+      });
     }
 
     this.resetHistory = () => {
-      axios.post('/api/reset',
-      {},
-      {
-        headers: {
-          'X-User-Secret': this.state.secret
-        }
-      }).then((response) => {
-        console.log(response);
+      // axios.post('/api/reset',
+      // {},
+      // {
+      //   headers: {
+      //     'X-User-Secret': this.state.secret
+      //   }
+      // }).then((response) => {
+      //   console.log(response);
+      // });
+      this.setState({
+        history: [],
+        schedule: this.calcSchedule([], this.state.goal, this.state.alpha)
       });
-      this.setState({history:[]});
-      this.resetSchedule();
     }
   }
 
@@ -192,6 +186,7 @@ class App extends Component {
             history={this.state.history}
             schedule={this.state.schedule}
             resetHistory={this.resetHistory}
+            deleteOneHistory={this.deleteOneHistory}
           />
 
           <GraphComponent

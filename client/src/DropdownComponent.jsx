@@ -50,8 +50,11 @@ export default class DropdownComponent extends Component {
                 return <li key={ix}>{moment.unix(ts).format('hh:mm a')}</li>;
               })}
             </ul>
+            <Button className="mdc-button" onClick={this.props.deleteOneHistory}>
+              <p className="danger-text">Delete Last Drink</p>
+            </Button>
             <Button className="mdc-button" onClick={this.props.resetHistory}>
-              <p className="danger-text">Reset History</p>
+              <p className="danger-text">Delete All</p>
             </Button>
             {this.props.active ? scheduleGoalView : <div></div>}
           </div>

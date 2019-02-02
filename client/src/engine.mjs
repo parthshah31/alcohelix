@@ -2,7 +2,7 @@ import moment from 'moment'
 const std_drink_grams = 14.0;
 const K_L_ON = 8.0 / 60 / 60;
 const alpha_bs = 0.006
-const minDrinkWaitTime =  5 * 60;
+const minDrinkWaitTime =  2 * 60;
 
 
 export function calc_K_BS_MAX(food) {
@@ -212,7 +212,7 @@ export function getBacSeries(
     deltaBac = newBac - currBac;
     currBac = newBac;
 
-    if (soberTime < 0 && t >= currentTime + 5*60 && currBac < soberCutoff && deltaBac <= 0) {
+    if (soberTime < 0 && t >= currentTime && currBac < soberCutoff && deltaBac <= 0) {
       soberTime = t;
     }
     times.push(t);
