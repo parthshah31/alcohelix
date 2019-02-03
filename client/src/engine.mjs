@@ -8,13 +8,13 @@ const minDrinkWaitTime =  2 * 60;
 export function calc_K_BS_MAX(food) {
   let K_BS_MAX = null;
   switch(food) {
-    case 0:
+    case '0':
       K_BS_MAX = std_drink_grams / 10 / 60;
       break;
-    case 1:
+    case '1':
       K_BS_MAX = std_drink_grams / 20 / 60;
       break;
-    case 2:
+    case '2':
       K_BS_MAX = std_drink_grams / 30 / 60;
       break;
     default:
