@@ -198,7 +198,7 @@ export function getBacSeries(
   let state = [initial_q_st, initial_q_bs];
   let x = 0;
 
-  let soberCutoff = 0.02
+  let soberCutoff = 0.01
   let soberTime = -1;
   let currBac = 0;
   let deltaBac = 0;
@@ -212,7 +212,10 @@ export function getBacSeries(
     deltaBac = newBac - currBac;
     currBac = newBac;
 
-    if (soberTime < 0 && t >= currentTime && currBac < soberCutoff && deltaBac <= 0) {
+    if (soberTime < 0 && drinkTimes.length == 0){
+      soberTime = currentTime;
+    }
+    else if (soberTime < 0 && t > currentTime && currBac < soberCutoff && deltaBac < 0) {
       soberTime = t;
     }
     times.push(t);

@@ -29,7 +29,7 @@ export default class DropdownComponent extends Component {
         </div>
         <div className="sliders">
           <p><strong>goal BAC:</strong> {Math.round(this.props.goal*100)/100}</p>
-          <Slider value={this.props.goal} min={0.04} max={0.16} step={0.02} aria-labelledby="label" onChange={this.props.handleGoalChange}/>
+          <Slider value={this.props.goal} min={0.04} max={0.30} step={0.02} aria-labelledby="label" onChange={this.props.handleGoalChange}/>
           <p><strong>aggressiveness:</strong> {Math.round(this.props.alpha*10)/10}</p>
           <Slider value={this.props.alpha} min={0.0} max={1.0} step={0.1} aria-labelledby="label" onChange={this.props.handleAlphaChange}/>
         </div>

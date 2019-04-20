@@ -19,9 +19,9 @@ class App extends Component {
       gender: 'M',
       food: '1',
       history: [
-        moment().unix()-90*60,
-        moment().unix()-80*60,
-        moment().unix()-10*60,
+        // moment().unix()-90*60,
+        // moment().unix()-80*60,
+        // moment().unix()-10*60,
       ],
       schedule: [],
       scheduleHours: 6,
